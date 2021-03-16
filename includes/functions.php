@@ -15,12 +15,6 @@ function set_message($msg){
     }
 }
 
-function confirm($result){
-    global $conn;
-    if (!$result) {
-        die("QUERY FAILED " . $conn->connect_error);
-    }
-}
 
 function display_message(){
     if(isset ($_SESSION['message'])){
@@ -29,11 +23,19 @@ function display_message(){
     }
 }
 
+
+function confirm($result){
+    global $conn;
+    if (!$result) {
+        die("QUERY FAILED " . $conn->connect_error);
+    }
+}
+
 //check input text and password fields
 function text_input($input,$regEx,$msg){
 
     if (empty($_POST[$input])) {
-        global ${$input.'Err'};
+        global ${$input.'Err'}; // makes variable name, ex. if $input is first_name, it is first_nameErr
         ${$input.'Err'} = "Field is required";
     }  // check if name only contains letters and whitespace
     elseif (!preg_match($regEx, $_POST[$input])) {
@@ -61,7 +63,8 @@ function redirect($location){
 }
 
 
-function add_user(){
+function add_user()
+{
     global $conn;
     global $first_name, $last_name, $user, $email, $hashed_password, $age;
 
@@ -72,17 +75,27 @@ function add_user(){
     $hashed_password = $conn->real_escape_string($hashed_password);
     $age = $conn->real_escape_string($age);
 
-    $sql = "INSERT INTO users (username, password, email, first_name,	last_name, age) VALUES ('$user', '$hashed_password', '$email', '$first_name', '$last_name','$age')";
+    // checks if username already exists
+    $sql_check = "SELECT * FROM users WHERE username = '{$user}'";
+    $result = $conn->query($sql_check);
 
-
-    if ($conn->query($sql) === TRUE) {
-        echo "New record created successfully";
-        redirect('thanks.php');
+    if ($result->num_rows > 0) {
+        global $userErr;
+        $userErr = "Username is already taken, please choose another one!";
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
 
-    $conn->close();
+        $sql = "INSERT INTO users (username, password, email, first_name,	last_name, age) VALUES ('$user', '$hashed_password', '$email', '$first_name', '$last_name','$age')";
+
+
+        if ($conn->query($sql) === TRUE) {
+            echo "New record created successfully";
+            redirect('thanks.php');
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+
+        $conn->close();
+    }
 }
 
 
