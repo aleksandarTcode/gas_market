@@ -7,6 +7,28 @@ function test_input($data) {
     return $data;
 }
 
+function set_message($msg){
+    if(!empty($msg)){
+        $_SESSION['message'] = $msg;
+    }else {
+        $msg = "";
+    }
+}
+
+function confirm($result){
+    global $conn;
+    if (!$result) {
+        die("QUERY FAILED " . $conn->connect_error);
+    }
+}
+
+function display_message(){
+    if(isset ($_SESSION['message'])){
+        echo  $_SESSION['message'];
+        unset($_SESSION['message']);
+    }
+}
+
 //check input text and password fields
 function text_input($input,$regEx,$msg){
 
@@ -26,8 +48,74 @@ function text_input($input,$regEx,$msg){
     }
 }
 
+function conn_check(){
+    global  $conn;
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+}
 
 
+function redirect($location){
+    header("Location: $location");
+}
+
+
+function add_user(){
+    global $conn;
+    global $first_name, $last_name, $user, $email, $hashed_password, $age;
+
+    $first_name = $conn->real_escape_string($first_name);
+    $last_name = $conn->real_escape_string($last_name);
+    $user = $conn->real_escape_string($user);
+    $email = $conn->real_escape_string($email);
+    $hashed_password = $conn->real_escape_string($hashed_password);
+    $age = $conn->real_escape_string($age);
+
+    $sql = "INSERT INTO users (username, password, email, first_name,	last_name, age) VALUES ('$user', '$hashed_password', '$email', '$first_name', '$last_name','$age')";
+
+
+    if ($conn->query($sql) === TRUE) {
+        echo "New record created successfully";
+        redirect('thanks.php');
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    $conn->close();
+}
+
+
+function login_user(){
+    global $conn;
+    $username = $conn->real_escape_string(test_input($_POST['username']));
+    $password = $conn->real_escape_string(test_input($_POST['password']));
+
+    $sql = "SELECT * FROM users WHERE username = '{$username}'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows !== 0) {
+        $row = $result->fetch_assoc();
+        if($row['username'] == $username && password_verify($password,$row['password'])){
+            $_SESSION['username'] = $username; // session for login check
+
+        redirect("index.php");
+        }
+        else {
+            set_message("Your Password is wrong!");
+            $_SESSION['user'] = $username; // session for form reenter after wrong entry
+            $_SESSION['password'] = $password; // session for form reenter after wrong entry
+        }
+
+    }
+    else {
+        set_message("Your Username or Password is wrong!");
+        $_SESSION['user'] = $username; // session for form reenter after wrong entry
+        $_SESSION['password'] = $password; // session for form reenter after wrong entry
+    }
+    $conn->close();
+
+}
 
 
 ?>

@@ -6,7 +6,7 @@ include ("includes/header.php")
     <div class="row">
       <div class="col-md-6 offset-md-3 mt-5">
           <h1 class="display-4 text-center">Create account</h1>
-          <form action="register.php" method="post">
+          <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
           <div class="form-group">
               <label for="first_name">First Name</label>
               <input type="text" class="form-control" name="first_name" placeholder="Enter First Name" maxlength="30" value="<?php echo $_SESSION['first_name'];?>"><span class="error"><?php echo $first_nameErr;?></span>
@@ -18,8 +18,8 @@ include ("includes/header.php")
               </div>
 
               <div class="form-group">
-                  <label for="username">Username</label>
-                  <input class="form-control" name="username" type="text" id="username" placeholder="Enter Username" maxlength="30" value="<?php echo $_SESSION['username']; ?>"><span class="error"><?php echo $usernameErr;?></span>
+                  <label for="user">Username</label>
+                  <input class="form-control" name="user" type="text" id="user" placeholder="Enter Username" maxlength="30" value="<?php echo $_SESSION['user']; ?>"><span class="error"><?php echo $userErr;?></span>
               </div>
 
               <div class="form-group">

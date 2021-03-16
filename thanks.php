@@ -15,11 +15,10 @@
 <div class="container">
 
     <div class="jumbotron text-center">
-        <h1 class="display-4">Thank You For Register on our Forum!</h1>
-        <p class="lead">Please check your email for your password</p>
+        <h1 class="display-4">Thank You For Registering!</h1>
         <hr>
         <p>Enjoy!</p>
-        <a class="btn btn-primary btn-lg" href="register.php" role="button">Back</a>
+        <a class="btn btn-success btn-lg" href="login.php" role="button">Login</a>
     </div>
 </div>
 

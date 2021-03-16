@@ -1,25 +1,30 @@
 <?php
 require_once ("includes/config.php");
 
-$first_nameErr = $last_nameErr = $usernameErr = $emailErr =  $passwordErr = $confirm_passwordErr = $ageErr = "";
-$first_name = $last_name = $username = $email = $phone = $password = $confirm_password = $age = "";
-$_SESSION['first_name'] = $_SESSION['last_name'] = $_SESSION['username'] = $_SESSION['email'] = $_SESSION['password'] = $_SESSION['confirm_password'] = $_SESSION['age'] = "";
+if(isset($_SESSION['username'])){
+    header("Location: index.php");
+}
+
+
+$first_nameErr = $last_nameErr = $userErr = $emailErr =  $passwordErr = $confirm_passwordErr = $ageErr = "";
+$first_name = $last_name = $user = $email = $phone = $password = $confirm_password = $age = "";
+$_SESSION['first_name'] = $_SESSION['last_name'] = $_SESSION['user'] = $_SESSION['email'] = $_SESSION['password'] = $_SESSION['confirm_password'] = $_SESSION['age'] = "";
 
 
 if (isset($_POST['register'])) {
 
-    // First and last name check
+    // First and last name check and set
     $text_input_regEx = "/^[a-zA-Z-' ]*$/";
     $text_input_msg = "Only letters and white space allowed";
     text_input('first_name',$text_input_regEx,$text_input_msg);
     text_input('last_name',$text_input_regEx,$text_input_msg);
 
-    // Username check
-    $username_regEx = "/^[a-zA-Z0-9]*$/";
-    $username_msg = "Only letters and numbers allowed";
-    text_input('username',$username_regEx,$username_msg);
+    // Username check an set
+    $user_regEx = "/^[a-zA-Z0-9]*$/";
+    $user_msg = "Only letters and numbers allowed";
+    text_input('user',$user_regEx,$user_msg);
 
-    // Password check
+    // Password check and set
     $password_regEx = "/^(?=.*\d)(?=.*[@#\-_$%^&+=§!\?])(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z@#\-_$%^&+=§!\?]{8,20}$/";
     $password_msg = "Password must contain 8-20 characters of at least one lowercase, uppercase, number and special character. Allowed characters are letters, numbers and special characters @#-_$%^&+=§!?";
     text_input('password',$password_regEx,$password_msg);
@@ -37,7 +42,7 @@ if (isset($_POST['register'])) {
 
     }
 
-    // Email check
+    // Email check and set
     if (empty($_POST["email"])) {
         $emailErr = "Email is required";
     }
@@ -51,45 +56,43 @@ if (isset($_POST['register'])) {
         $_SESSION['email'] = $email;
     }
 
-    // Age check
+    // Age check and set
     $age_regEx = "/^[1-9][0-9]{1,3}$/";
     $age_msg = 'Age must be number';
     text_input('age',$age_regEx,$age_msg);
 
 
+    if($first_name && $last_name && $user && $email && $password && $confirm_password && $age){
+
+        add_user();
 
 
-    if($first_name && $last_name && $username && $email && $password && $confirm_password && $age){
-
-        echo $first_name;
-        echo "<br>";
-        echo $last_name;
-        echo "<br>";
-        echo $username;
-        echo "<br>";
-        echo $email;
-        echo "<br>";
-        echo $password;
-        echo "<br>";
-        echo $confirm_password;
-        echo "<br>";
-        echo $age;
-        echo "<br>";
-        echo $hashed_password;
-
-        echo "<br>";
-        echo "<br>";
-
-
-
-foreach ($_REQUEST as $key=>$value){
-    echo $key." ".$value."<br>";
-
-}
+//        echo $first_name;
+//        echo "<br>";
+//        echo $last_name;
+//        echo "<br>";
+//        echo $user;
+//        echo "<br>";
+//        echo $email;
+//        echo "<br>";
+//        echo $password;
+//        echo "<br>";
+//        echo $confirm_password;
+//        echo "<br>";
+//        echo $age;
+//        echo "<br>";
+//        echo $hashed_password;
+//
+//        echo "<br>";
+//        echo "<br>";
+//foreach ($_REQUEST as $key=>$value){
+//    echo $key." ".$value."<br>";
+//}
 
     }
-
 }
 
 include ("includes/register_form.php");
+
+
 ?>

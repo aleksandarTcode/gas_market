@@ -1,11 +1,14 @@
 <?php
+
 require_once ("includes/config.php");
 include ("includes/header.php");
+
+if(!isset($_SESSION['username'])){
+    header("Location: login.php");
+}
+
+print_r($_SESSION);
 ?>
-
-
-
-
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
         <div class="container">
             <a href="index.php" class="navbar-brand">South Stream</a>
@@ -14,14 +17,12 @@ include ("includes/header.php");
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav">
+
                     <li class="nav-item px-2">
-                        <a href="#" class="nav-link active">Dashboard</a>
+                        <a href="show.php" class="nav-link">Data</a>
                     </li>
                     <li class="nav-item px-2">
-                        <a href="#" class="nav-link">Posts</a>
-                    </li>
-                    <li class="nav-item px-2">
-                        <a href="#" class="nav-link">Categories</a>
+                        <a href="insert.php" class="nav-link">Insert</a>
                     </li>
                     <li class="nav-item px-2">
                         <a href="#" class="nav-link">Users</a>
@@ -31,7 +32,7 @@ include ("includes/header.php");
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown mr-3">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                            <i class="fas fa-user"></i> Welcome User
+                            <i class="fas fa-user"></i> Welcome <?php echo $_SESSION['username'];?>
                         </a>
                         <div class="dropdown-menu">
                             <a href="profile.html" class="dropdown-item">
@@ -43,13 +44,8 @@ include ("includes/header.php");
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a href="register.php" class="nav-link">
-                            <i class="fas fa-user-plus"></i> Register
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="login.php" class="nav-link">
-                            <i class="fas fa-user"></i> Login
+                        <a href="logout.php" class="nav-link">
+                            <i class="fas fa-user-minus"></i> Logout
                         </a>
                     </li>
                 </ul>

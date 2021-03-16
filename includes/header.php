@@ -11,6 +11,6 @@
     <style>
         .error {color: #FF0000;}
     </style>
-    <title>Register</title>
+    <title>South Stream</title>
 </head>
 <body>
