@@ -58,36 +58,13 @@ if (isset($_POST['register'])) {
 
     // Age check and set
     $age_regEx = "/^[1-9][0-9]{1,3}$/";
-    $age_msg = 'Age must be number';
+    $age_msg = 'Age must be a number';
     text_input('age',$age_regEx,$age_msg);
 
 
     if($first_name && $last_name && $user && $email && $password && $confirm_password && $age){
 
         add_user();
-
-
-//        echo $first_name;
-//        echo "<br>";
-//        echo $last_name;
-//        echo "<br>";
-//        echo $user;
-//        echo "<br>";
-//        echo $email;
-//        echo "<br>";
-//        echo $password;
-//        echo "<br>";
-//        echo $confirm_password;
-//        echo "<br>";
-//        echo $age;
-//        echo "<br>";
-//        echo $hashed_password;
-//
-//        echo "<br>";
-//        echo "<br>";
-//foreach ($_REQUEST as $key=>$value){
-//    echo $key." ".$value."<br>";
-//}
 
     }
 }

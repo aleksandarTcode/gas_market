@@ -35,16 +35,16 @@ function confirm($result){
 function text_input($input,$regEx,$msg){
 
     if (empty($_POST[$input])) {
-        global ${$input.'Err'}; // makes variable name, ex. if $input is first_name, it is first_nameErr
+        global ${$input.'Err'}; // makes name for error variable, ex. if $input is first_name, it is first_nameErr
         ${$input.'Err'} = "Field is required";
-    }  // check if name only contains letters and whitespace
+    }  // check regular expression for input
     elseif (!preg_match($regEx, $_POST[$input])) {
         global ${$input.'Err'};
         ${$input.'Err'} = $msg;
-        $_SESSION[$input] = $_POST[$input];
+        $_SESSION[$input] = $_POST[$input]; // makes session for form output when input is wrong
     }
     else {
-        global $$input;
+        global $$input; // // makes name for variable
         $$input = test_input($_POST[$input]);
         $_SESSION[$input] = $$input;
     }
