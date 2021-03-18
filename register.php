@@ -67,6 +67,7 @@ if (isset($_POST['register'])) {
         add_user();
 
     }
+
 }
 
 include ("includes/register_form.php");

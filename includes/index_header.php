@@ -3,9 +3,6 @@
 require_once ("config.php");
 include ("header.php");
 
-if(!isset($_SESSION['username'])){
-    header("Location: login.php");
-}
 
 print_r($_SESSION);
 ?>
@@ -19,13 +16,13 @@ print_r($_SESSION);
                 <ul class="navbar-nav">
 
                     <li class="nav-item px-2">
-                        <a href="data/show.php" class="nav-link">Data</a>
+                        <a href="show.php" class="nav-link">Data</a>
                     </li>
                     <li class="nav-item px-2">
-                        <a href="data/insert.php" class="nav-link">Insert</a>
+                        <a href="insert.php" class="nav-link">Insert</a>
                     </li>
                     <li class="nav-item px-2">
-                        <a href="data/users.php" class="nav-link">Users</a>
+                        <a href="users.php" class="nav-link">Users</a>
                     </li>
                 </ul>
 

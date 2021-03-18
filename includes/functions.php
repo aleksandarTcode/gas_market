@@ -130,5 +130,60 @@ function login_user(){
 
 }
 
+function insert_data(){
+    global $conn;
+
+    $date = date('Y-m-d H:i:s', strtotime($_POST['date'].date('H:i:s')));
+
+    $country = $conn->real_escape_string($_POST['country']);
+    $amount = $_SESSION['amount'] = $conn->real_escape_string($_POST['amount']);
+    $price = $_SESSION['price'] = $conn->real_escape_string($_POST['price']);
+    $date = $conn->real_escape_string($date);
+    $_SESSION['date'] = $_POST['date'];
+
+    $user_id = $conn->real_escape_string(get_user_id());
+
+
+    $sql = "INSERT into gas (country, amount, price, date1, user_id) VALUES ('{$country}','{$amount}','{$price}','{$date}','{$user_id}')";
+
+    if ($conn->query($sql) === TRUE) {
+        set_message("New record created successfully");
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    $conn->close();
+
+}
+
+
+function get_user_id()
+{
+    global $conn;
+
+    $username = $_SESSION['username'];
+    $sql = "SELECT id FROM users WHERE username='{$username}'";
+
+    $result = $conn->query($sql);
+
+    if ($result->num_rows !== 0) {
+        $row = $result->fetch_assoc();
+        return $row['id'];
+    }
+}
+
+// country remain selected after form submit
+function select_country_in_form($country){
+    if (isset($_POST['country']) && $_POST['country']==$country)
+        echo "selected";
+}
+
+
+function clear_fields(){
+    $amount = $_SESSION['amount'] = "";
+    $price = $_SESSION['price'] = "";
+    $date = $_SESSION['date'] = "";
+}
+
 
 ?>
