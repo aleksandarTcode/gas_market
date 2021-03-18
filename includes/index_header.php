@@ -56,7 +56,7 @@ print_r($_SESSION);
             <div class="row">
                 <div class="col-md-6">
                     <h1>
-                        <i class="fas fa-cog"></i> Home</h1>
+                        <i class="fab fa-gripfire"></i> Home</h1>
                 </div>
             </div>
         </div>

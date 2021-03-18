@@ -26,9 +26,9 @@
                 <div class="form-group">
                     <label for="amount">Amount</label>
                     <div class="input-group">
-                        <input type="number" class="form-control" name="amount" placeholder="Amount in &#13221;" min="1" max="999999999" required oninvalid="this.setCustomValidity('Please enter valid number between 1 and 999999999')" oninput="this.setCustomValidity('')" value="<?php echo $_SESSION['amount'];?>">
+                        <input type="number" class="form-control" name="amount" placeholder="Amount in Mmbtu" min="1" max="999999999" required oninvalid="this.setCustomValidity('Please enter valid number between 1 and 999999999')" oninput="this.setCustomValidity('')" value="<?php echo $_SESSION['amount'];?>">
                         <div class="input-group-append">
-                            <span class="input-group-text">&#13221;</span>
+                            <span class="input-group-text">Mmbtu</span>
                         </div>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                     <div class="input-group">
                         <input type="number" class="form-control" name="price" placeholder="Price in &#36;" min="1" max="999999999999" required oninvalid="this.setCustomValidity('Please enter valid number between 1 and 999999999999')" oninput="this.setCustomValidity('')" value="<?php echo $_SESSION['price'];?>">
                         <div class="input-group-append">
-                            <span class="input-group-text">&#36;</span>
+                            <span class="input-group-text">&#36; for Mmbtu</span>
                         </div>
                     </div>
                 </div>

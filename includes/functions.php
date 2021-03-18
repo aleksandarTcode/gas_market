@@ -138,13 +138,14 @@ function insert_data(){
     $country = $conn->real_escape_string($_POST['country']);
     $amount = $_SESSION['amount'] = $conn->real_escape_string($_POST['amount']);
     $price = $_SESSION['price'] = $conn->real_escape_string($_POST['price']);
+    $total_price = $amount * $price;
     $date = $conn->real_escape_string($date);
     $_SESSION['date'] = $_POST['date'];
 
     $user_id = $conn->real_escape_string(get_user_id());
 
 
-    $sql = "INSERT into gas (country, amount, price, date1, user_id) VALUES ('{$country}','{$amount}','{$price}','{$date}','{$user_id}')";
+    $sql = "INSERT into gas (country, amount, price, total_price,date1, user_id) VALUES ('{$country}','{$amount}','{$price}','{$total_price}','{$date}','{$user_id}')";
 
     if ($conn->query($sql) === TRUE) {
         set_message("New record created successfully");
@@ -185,5 +186,61 @@ function clear_fields(){
     $date = $_SESSION['date'] = "";
 }
 
+
+function num_rows($sql){
+    global $conn;
+
+    $result = $conn->query($sql);
+
+    if ($result->num_rows !== 0) {
+        return $result->num_rows;
+    }
+
+    $conn->close();
+}
+
+
+function show_all_unique_countries(){
+    global $conn;
+
+    $sql = "SELECT DISTINCT country FROM gas";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows !== 0) {
+
+        $i=1;
+        while ($row = $result->fetch_assoc()){
+
+            $average_gas_price = round(average_gas_price($row['country']),3);
+            $table=<<<DELIMITER
+                <tr>
+                    <th scope="row">{$i}</th>
+                    <td>{$row['country']}</td>
+                    <td>{$average_gas_price}&#36;</td>
+                </tr>
+DELIMITER;
+            $i++;
+            echo $table;
+
+
+        }
+    }
+
+    $conn->close();
+}
+
+
+function average_gas_price($country)
+{
+    global $conn;
+    $sql = "SELECT avg(price) as AveragePrice FROM gas WHERE country='{$country}'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows !== 0) {
+        $row = $result->fetch_assoc();
+        return $row['AveragePrice'];
+    }
+
+}
 
 ?>
