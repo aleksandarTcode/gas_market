@@ -6,7 +6,10 @@ if(!isset($_SESSION['username'])){
 }
 ?>
 
+
 <?php
+
+$countries_from_checkbox_for_title =implode(", ", $_SESSION['countries']);
 
 if(isset($_GET['entry_id'])){
 
@@ -17,20 +20,17 @@ if(isset($_GET['entry_id'])){
 
 ?>
 
+
 <div class="container">
     <div class="row">
         <div class="col-md-10 offset-md-1 mt-5">
 
-            <div class="alert alert-danger text-center" <?php if (!isset($_SESSION['message'])) echo "hidden"?>>
-                <?php display_message(); ?>
-            </div>
-
-            <p class="display-4 text-center">All Entries</p>
+            <p class="display-4 text-center">Entries for <?php echo $countries_from_checkbox_for_title;?></p>
 
             <table class="table table-bordered mt-5">
                 <thead>
                 <tr class="text-center">
-
+                    <th>#</th>
                     <th>Country</th>
                     <th>Amount(Mmbtu)</th>
                     <th>Price(&#36; for Mmbtu)</th>
@@ -40,10 +40,9 @@ if(isset($_GET['entry_id'])){
                 </tr>
                 </thead>
                 <tbody>
-              <?php show_all(); ?>
+                <?php show_selected_countries_entries(); ?>
                 </tbody>
             </table>
-
 
         </div>
     </div>

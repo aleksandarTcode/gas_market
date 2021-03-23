@@ -76,13 +76,20 @@ function add_user()
     $age = $conn->real_escape_string($age);
 
     // checks if username already exists
-    $sql_check = "SELECT * FROM users WHERE username = '{$user}'";
-    $result = $conn->query($sql_check);
+    $sql_username_check = "SELECT * FROM users WHERE username = '{$user}'";
+    $result = $conn->query($sql_username_check);
+
+    $sql_email_check = "SELECT * FROM users WHERE email = '{$email}'";
+    $result2 = $conn->query($sql_email_check);
 
     if ($result->num_rows > 0) {
         global $userErr;
         $userErr = "Username is already taken, please choose another one!";
-    } else {
+    } elseif($result2->num_rows > 0) {
+        global $emailErr;
+        $emailErr = "Email is already in use, please choose another one!";
+    }
+    else {
 
         $sql = "INSERT INTO users (username, password, email, first_name,	last_name, age) VALUES ('$user', '$hashed_password', '$email', '$first_name', '$last_name','$age')";
 
@@ -186,24 +193,10 @@ function clear_fields(){
     $date = $_SESSION['date'] = "";
 }
 
-
-function num_rows($sql){
-    global $conn;
-
-    $result = $conn->query($sql);
-
-    if ($result->num_rows !== 0) {
-        return $result->num_rows;
-    }
-
-    $conn->close();
-}
-
-
 function show_all_unique_countries(){
     global $conn;
 
-    $sql = "SELECT DISTINCT country FROM gas";
+    $sql = "SELECT country, ROUND(AVG(price),3) as average FROM gas GROUP BY country ORDER BY average ASC";
     $result = $conn->query($sql);
 
     if ($result->num_rows !== 0) {
@@ -211,17 +204,18 @@ function show_all_unique_countries(){
         $i=1;
         while ($row = $result->fetch_assoc()){
 
-            $average_gas_price = round(average_gas_price($row['country']),3);
+//            $average_gas_price = round(average_gas_price($row['country']),3);
             $table=<<<DELIMITER
                 <tr>
                     <th scope="row">{$i}</th>
                     <td>{$row['country']}</td>
-                    <td>{$average_gas_price}&#36;</td>
+                    <td>{$row['average']}&#36;</td>
+                    <td><input type="checkbox" name="countries[]" class="check" id="id{$i}" value="{$row['country']}"></td>
+                    
                 </tr>
 DELIMITER;
             $i++;
             echo $table;
-
 
         }
     }
@@ -243,4 +237,172 @@ function average_gas_price($country)
 
 }
 
+
+
+function num_rows($sql){
+    global $conn;
+
+    $result = $conn->query($sql);
+
+    return $result->num_rows;
+
+}
+
+
+function show_all(){
+    global $conn;
+
+    $total_entries = num_rows("SELECT * FROM gas");
+    $perPage = 2;
+
+    if(isset($_GET['page'])){
+        $page = preg_replace('/[^0-9]/','', $_GET['page']);
+    }else{
+        $page = 1;
+    }
+
+    $lastPage = ceil($total_entries / $perPage);
+
+    if($page < 1){
+        $page = 1;
+    }elseif($page > $lastPage){
+        $page = $lastPage;
+    }
+
+    $middleNumbers = '';
+    $sub1 = $page - 1;
+    $sub2 = $page - 2;
+    $add1 = $page + 1;
+    $add2 = $page + 2;
+
+    if($page == 1){
+
+        $middleNumbers.='<li class="page-item active"><a class="page-link">'.$page.'</a></li>';
+
+        $middleNumbers.='<li class="page-item"><a class="page-link" href="'.$_SERVER['PHP_SELF'].'?page='.$add1.'">'.$add1.'</a></li>';
+
+
+    } elseif($page == $lastPage){
+
+        $middleNumbers .= '<li class="page-item"><a class="page-link" href="' . $_SERVER['PHP_SELF'] . '?page=' . $sub1 . '">' . $sub1 . '</a></li>';
+
+        $middleNumbers.='<li class="page-item active"><a class="page-link">'.$page.'</a></li>';
+
+
+
+    }elseif ($page > 2 && $page < ($lastPage -1)){
+        $middleNumbers.='<li class="page-item"><a class="page-link" href="'.$_SERVER['PHP_SELF'].'?page='.$sub2.'">'.$sub2.'</a></li>';
+
+        $middleNumbers.='<li class="page-item"><a class="page-link" href="'.$_SERVER['PHP_SELF'].'?page='.$sub1.'">'.$sub1.'</a></li>';
+
+        $middleNumbers.='<li class="page-item active"><a class="page-link">'.$page.'</a></li>';
+
+        $middleNumbers.='<li class="page-item"><a class="page-link" href="'.$_SERVER['PHP_SELF'].'?page='.$add1.'">'.$add1.'</a></li>';
+
+        $middleNumbers.='<li class="page-item"><a class="page-link" href="'.$_SERVER['PHP_SELF'].'?page='.$add2.'">'.$add2.'</a></li>';
+
+
+
+    }elseif($page > 1 && $page < $lastPage){
+        $middleNumbers.='<li class="page-item"><a class="page-link" href="'.$_SERVER['PHP_SELF'].'?page='.$sub1.'">'.$sub1.'</a></li>';
+
+        $middleNumbers.='<li class="page-item active"><a class="page-link">'.$page.'</a></li>';
+
+        $middleNumbers.='<li class="page-item"><a class="page-link" href="'.$_SERVER['PHP_SELF'].'?page='.$add1.'">'.$add1.'</a></li>';
+
+    }
+
+    $limit = 'LIMIT ' . ($page-1)* $perPage . ',' . $perPage;
+
+
+
+    $outputPagination = "";
+
+
+    if ($page != 1){
+        $prev = $page - 1;
+        $outputPagination .= '<li class="page-item"><a class="page-link" href="'.$_SERVER['PHP_SELF'].'?page='.$prev.'">Back</a></li>';
+    }
+
+    $outputPagination .= $middleNumbers;
+
+    if ($page != $lastPage){
+        $next = $page + 1;
+        $outputPagination .= '<li class="page-item"><a class="page-link" href="'.$_SERVER['PHP_SELF'].'?page='.$next.'">Next</a></li>';
+    }
+
+
+    echo "<div class='text-center' style='clear: both'><ul class='pagination'>{$outputPagination}</ul></div>";
+
+
+    $sql = "SELECT id,country, amount, price, total_price, date1 FROM gas ORDER BY date1 desc {$limit}";
+    $result = $conn->query($sql);
+    if ($result->num_rows !== 0) {
+        while($row = $result->fetch_assoc()){
+
+            $table=<<<DELIMITER
+            <tr>
+                    
+                    <td>{$row['country']}</td>
+                    <td>{$row['amount']} Mmbtu</td>
+                    <td>{$row['price']} &#36;</td>
+                    <td>{$row['total_price']} &#36;</td>
+                    <td>{$row['date1']}</td>
+                    <td>
+                <a href="show.php?entry_id={$row['id']}"  class="btn btn-danger btn-block" name="register" onClick="return confirm('Are you sure you want to delete?')">Delete</a></td>
+                </tr>
+DELIMITER;
+
+            echo $table;
+
+        }
+    }
+    $conn->close();
+}
+
+function delete_entry($table,$id){
+    global $conn;
+    $id = $conn->real_escape_string($id);
+    $sql = "DELETE from {$table} WHERE id = '{$id}'";
+
+    if ($conn->query($sql) !== TRUE) {
+        echo "Error deleting record: " . $conn->error;
+    }
+
+
+}
+
+
+function show_selected_countries_entries(){
+
+    global $conn;
+
+    $countries_from_checkbox_sessions = "'" . implode("','", $_SESSION['countries']) . "'";
+
+    $sql = "SELECT id,country, amount, price, total_price, date1 FROM gas WHERE country IN({$countries_from_checkbox_sessions}) ORDER BY country";
+
+    $result = $conn->query($sql);
+    if ($result->num_rows !== 0) {
+        $i=1;
+        while($row = $result->fetch_assoc()){
+
+            $table=<<<DELIMITER
+            <tr>
+                    <th scope="row">{$i}</th>
+                    <td>{$row['country']}</td>
+                    <td>{$row['amount']} Mmbtu</td>
+                    <td>{$row['price']} &#36;</td>
+                    <td>{$row['total_price']} &#36;</td>
+                    <td>{$row['date1']}</td>
+                    <td>
+                <a href="country.php?entry_id={$row['id']}"  class="btn btn-danger btn-block" name="register" onClick="return confirm('Are you sure you want to delete?')">Delete</a></td>
+                </tr>
+DELIMITER;
+            $i++;
+            echo $table;
+
+        }
+    }
+    $conn->close();
+}
 ?>

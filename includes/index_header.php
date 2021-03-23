@@ -3,12 +3,11 @@
 require_once ("config.php");
 include ("header.php");
 
-
-print_r($_SESSION);
+//print_r($_SESSION);
 ?>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
         <div class="container">
-            <a href="index.php" class="navbar-brand">South Stream</a>
+            <a href="index.php" class="navbar-brand">Home</a>
             <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -41,7 +40,7 @@ print_r($_SESSION);
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a href="logout.php" class="nav-link">
+                        <a href="logout.php" class="nav-link" onClick="return confirm('Are you sure you want to logout?')">
                             <i class="fas fa-user-minus"></i> Logout
                         </a>
                     </li>
@@ -56,7 +55,7 @@ print_r($_SESSION);
             <div class="row">
                 <div class="col-md-6">
                     <h1>
-                        <i class="fab fa-gripfire"></i> Home</h1>
+                        <i class="fab fa-gripfire"></i> South Stream</h1>
                 </div>
             </div>
         </div>

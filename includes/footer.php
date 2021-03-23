@@ -16,6 +16,37 @@
 <script>
     // Get the current year for the copyright
     $('#year').text(new Date().getFullYear());
+
+    // checks all checkboxes when click on select all
+    $(document).ready(function () {
+        $('#select-all').click(function () {
+
+            if(this.checked){
+                $('.check').each(function () {
+                    this.checked = true;
+                });
+            } else {
+                $('.check').each(function () {
+                    this.checked = false;
+                });
+            }
+
+
+        });
+    });
+
+    // unchecks select_all checkbox when some other checkbox is unchecked
+    $(document).ready(function () {
+        $('.check').click(function () {
+
+            if(!this.checked){
+                $('#select-all').each(function () {
+                    this.checked = false;
+                });
+            }
+
+        });
+    });
 </script>
 </body>
 </html>

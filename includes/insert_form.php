@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-md-6 offset-md-3 mt-5">
 
-            <div class="alert alert-success" <?php if (!isset($_SESSION['message'])) echo "hidden"?>>
+            <div class="alert alert-success text-center" <?php if (!isset($_SESSION['message'])) echo "hidden"?>>
                 <?php display_message(); ?>
             </div>
             <p class="display-4 text-center">Insert Gas Data</p>
