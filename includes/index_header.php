@@ -20,9 +20,6 @@ include ("header.php");
                     <li class="nav-item px-2">
                         <a href="insert.php" class="nav-link">Insert</a>
                     </li>
-                    <li class="nav-item px-2">
-                        <a href="users.php" class="nav-link">Users</a>
-                    </li>
                 </ul>
 
                 <ul class="navbar-nav ml-auto">
@@ -30,14 +27,14 @@ include ("header.php");
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                             <i class="fas fa-user"></i> Welcome <?php echo $_SESSION['username'];?>
                         </a>
-                        <div class="dropdown-menu">
-                            <a href="profile.html" class="dropdown-item">
-                                <i class="fas fa-user-circle"></i> Profile
-                            </a>
-                            <a href="settings.html" class="dropdown-item">
-                                <i class="fas fa-cog"></i> Settings
-                            </a>
-                        </div>
+<!--                        <div class="dropdown-menu">-->
+<!--                            <a href="profile.html" class="dropdown-item">-->
+<!--                                <i class="fas fa-user-circle"></i> Profile-->
+<!--                            </a>-->
+<!--                            <a href="settings.html" class="dropdown-item">-->
+<!--                                <i class="fas fa-cog"></i> Settings-->
+<!--                            </a>-->
+<!--                        </div>-->
                     </li>
                     <li class="nav-item">
                         <a href="logout.php" class="nav-link" onClick="return confirm('Are you sure you want to logout?')">
