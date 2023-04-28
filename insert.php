@@ -4,6 +4,9 @@ include("includes/index_header.php");
 if(!isset($_SESSION['username'])){
     header("Location: login.php");
 }
+
+$_SESSION['amount'] = $_SESSION['price'] = $_SESSION['date'] = "";
+
 ?>
 
 <?php

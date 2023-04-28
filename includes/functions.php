@@ -253,8 +253,9 @@ function show_all(){
     global $conn;
 
     $total_entries = num_rows("SELECT * FROM gas");
-    $perPage = 2;
+    $perPage = 4;
 
+    //set page in url to 1 if it is set to non number
     if(isset($_GET['page'])){
         $page = preg_replace('/[^0-9]/','', $_GET['page']);
     }else{

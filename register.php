@@ -19,7 +19,7 @@ if (isset($_POST['register'])) {
     text_input('first_name',$text_input_regEx,$text_input_msg);
     text_input('last_name',$text_input_regEx,$text_input_msg);
 
-    // Username check an set
+    // Username check and set
     $user_regEx = "/^[a-zA-Z0-9]*$/";
     $user_msg = "Only letters and numbers allowed";
     text_input('user',$user_regEx,$user_msg);
