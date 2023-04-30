@@ -43,4 +43,4 @@ License
 
 ##Contributing
 
-If you would like to contribute to this app, please open an issue or submit a pull request.
+If you would like to contribute to this app, please open an issue or submit a pull request. 
